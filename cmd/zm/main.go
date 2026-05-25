@@ -204,6 +204,7 @@ func cmdTransactions(args []string) {
 	account := fs.String("account", "", "filter by account title (substring)")
 	tag := fs.String("tag", "", "filter by category title (substring)")
 	limit := fs.Int("limit", 30, "max rows to show")
+	showID := fs.Bool("id", false, "include the transaction id as the first column (for `zm tx delete`)")
 	fs.Parse(args)
 
 	s := mustStore()
@@ -253,7 +254,11 @@ func cmdTransactions(args []string) {
 	}
 
 	w := tabwriter.NewWriter(os.Stdout, 0, 0, 2, ' ', 0)
-	fmt.Fprintf(w, "DATE\tAMOUNT\tACCOUNT\tCATEGORY\tPAYEE\tCOMMENT\n")
+	if *showID {
+		fmt.Fprintf(w, "ID\tDATE\tAMOUNT\tACCOUNT\tCATEGORY\tPAYEE\tCOMMENT\n")
+	} else {
+		fmt.Fprintf(w, "DATE\tAMOUNT\tACCOUNT\tCATEGORY\tPAYEE\tCOMMENT\n")
+	}
 
 	for _, t := range txs {
 		amount, cur := formatTransaction(t, accounts, instruments)
@@ -264,7 +269,11 @@ func cmdTransactions(args []string) {
 		if len(comment) > 30 {
 			comment = comment[:27] + "..."
 		}
-		fmt.Fprintf(w, "%s\t%s %s\t%s\t%s\t%s\t%s\n", t.Date, amount, cur, acc, cat, payee, comment)
+		if *showID {
+			fmt.Fprintf(w, "%s\t%s\t%s %s\t%s\t%s\t%s\t%s\n", t.ID, t.Date, amount, cur, acc, cat, payee, comment)
+		} else {
+			fmt.Fprintf(w, "%s\t%s %s\t%s\t%s\t%s\t%s\n", t.Date, amount, cur, acc, cat, payee, comment)
+		}
 	}
 	w.Flush()
 	fmt.Printf("\nShowing %d of %d transactions\n", len(txs), countActive(state.Transaction))
