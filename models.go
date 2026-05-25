@@ -196,9 +196,11 @@ type Transaction struct {
 	IncomeInstrument  int     `json:"incomeInstrument"`
 	IncomeAccount     string  `json:"incomeAccount"`
 	Income            float64 `json:"income"`
+	IncomeBankID      *string `json:"incomeBankID"`
 	OutcomeInstrument int     `json:"outcomeInstrument"`
 	OutcomeAccount    string  `json:"outcomeAccount"`
 	Outcome           float64 `json:"outcome"`
+	OutcomeBankID     *string `json:"outcomeBankID"`
 
 	Tag            []string `json:"tag"`
 	Merchant       *string  `json:"merchant"`
