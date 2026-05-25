@@ -27,7 +27,7 @@ func main() {
 	case "accounts":
 		cmdAccounts(os.Args[2:])
 	case "transactions", "tx":
-		cmdTransactions(os.Args[2:])
+		cmdTx(os.Args[2:])
 	case "categories", "cats":
 		cmdCategories(os.Args[2:])
 	case "summary":
@@ -51,6 +51,8 @@ Commands:
   sync           Sync data from ZenMoney
   accounts       List accounts with balances
   transactions   List transactions (alias: tx)
+  tx add         Create a new transaction
+  tx delete      Soft-delete a transaction (aliases: tx del, tx rm)
   categories     List categories (alias: cats)
   summary        Monthly income/expense summary
   help           Show this help`)
