@@ -179,13 +179,19 @@ type ReminderMarker struct {
 }
 
 // Transaction represents a monetary operation.
+//
+// Optional fields are encoded without `omitempty`: POST /v8/diff/ rejects
+// Transaction payloads where any nullable field is missing ("No value for
+// property X in object Transaction <id> provided"). Reading is unaffected —
+// a JSON `null` and a missing field both unmarshal to a nil pointer / nil
+// slice, matching the previous behavior.
 type Transaction struct {
 	ID      string `json:"id"`
 	Changed int64  `json:"changed"`
 	Created int64  `json:"created"`
 	User    int    `json:"user"`
 	Deleted bool   `json:"deleted"`
-	Hold    *bool  `json:"hold,omitempty"`
+	Hold    *bool  `json:"hold"`
 
 	IncomeInstrument  int     `json:"incomeInstrument"`
 	IncomeAccount     string  `json:"incomeAccount"`
@@ -194,23 +200,23 @@ type Transaction struct {
 	OutcomeAccount    string  `json:"outcomeAccount"`
 	Outcome           float64 `json:"outcome"`
 
-	Tag            []string `json:"tag,omitempty"`
-	Merchant       *string  `json:"merchant,omitempty"`
-	Payee          *string  `json:"payee,omitempty"`
-	OriginalPayee  *string  `json:"originalPayee,omitempty"`
-	Comment        *string  `json:"comment,omitempty"`
+	Tag            []string `json:"tag"`
+	Merchant       *string  `json:"merchant"`
+	Payee          *string  `json:"payee"`
+	OriginalPayee  *string  `json:"originalPayee"`
+	Comment        *string  `json:"comment"`
 	Date           string   `json:"date"` // yyyy-MM-dd
-	MCC            *int     `json:"mcc,omitempty"`
-	ReminderMarker *string  `json:"reminderMarker,omitempty"`
+	MCC            *int     `json:"mcc"`
+	ReminderMarker *string  `json:"reminderMarker"`
 
 	// Original operation currency (when different from account currency)
-	OpIncome           *float64 `json:"opIncome,omitempty"`
-	OpIncomeInstrument *int     `json:"opIncomeInstrument,omitempty"`
-	OpOutcome          *float64 `json:"opOutcome,omitempty"`
-	OpOutcomeInstrument *int    `json:"opOutcomeInstrument,omitempty"`
+	OpIncome            *float64 `json:"opIncome"`
+	OpIncomeInstrument  *int     `json:"opIncomeInstrument"`
+	OpOutcome           *float64 `json:"opOutcome"`
+	OpOutcomeInstrument *int     `json:"opOutcomeInstrument"`
 
-	Latitude  *float64 `json:"latitude,omitempty"`
-	Longitude *float64 `json:"longitude,omitempty"`
+	Latitude  *float64 `json:"latitude"`
+	Longitude *float64 `json:"longitude"`
 }
 
 // Budget represents a monthly income/expense budget for a category.

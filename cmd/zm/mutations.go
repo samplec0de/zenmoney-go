@@ -61,7 +61,10 @@ func cmdTxAdd(args []string) {
 		fatal("account %q has no instrument (currency) set", acc.Title)
 	}
 
-	var tagIDs []string
+	// Non-nil empty slice; the server's diff endpoint distinguishes
+	// `"tag": []` (no categories) from a missing key (rejected as validation
+	// error) and we always send an explicit value.
+	tagIDs := []string{}
 	if *tag != "" {
 		tagIDs = []string{resolveTag(state.Tag, *tag, *income).ID}
 	}
